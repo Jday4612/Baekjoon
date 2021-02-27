@@ -1,0 +1,6 @@
+a, b = map(int, input().split())
+c, d = map(int, input().split())
+e, f = map(int, input().split())
+x = a if c == e else (c if a == e else e)
+y = b if d == f else (d if b == f else f)
+print(str(x) + " " + str(y))
