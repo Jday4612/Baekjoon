@@ -1,32 +1,43 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
+
+typedef struct {
+	int x;
+	int y;
+} coord;
+
+int compare(const void* a, const void* b);
 
 int main() {
 	int N;
-	int x[100000], y[100000];
+	coord c[100000];
 
 	scanf("%d", &N);
 
 	for (int i = 0; i < N; i++)
-		scanf("%d %d", &x[i], &y[i]);
+		scanf("%d %d", &c[i].x, &c[i].y);
 
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N - 1; j++) {
-			if (x[j] > x[j + 1] || (x[j] == x[j + 1] && y[j] > y[j + 1])) {
-				int tmp1 = x[j];
-				int tmp2 = y[j];
-
-				x[j] = x[j + 1];
-				y[j] = y[j + 1];
-				x[j + 1] = tmp1;
-				y[j + 1] = tmp2;
-			}
-		}
-	}
+	qsort(c, N, sizeof(coord), compare);
 
 	for (int i = 0; i < N; i++)
-		printf("%d %d\n", x[i], y[i]);
+		printf("%d %d\n", c[i].x, c[i].y);
 
 	return 0;
+}
+
+int compare(const void* a, const void* b) {
+	coord* A = (coord*)a;
+	coord* B = (coord*)b;
+
+	if (A->x > B->x)
+		return 1;
+	else if (A->x == B->x) {
+		if (A->y > B->y)
+			return 1;
+		else
+			return -1;
+	}
+	else
+		return 0;
 }
