@@ -21,6 +21,8 @@ int main() {
     merge_sort(A, 0, N - 1);
 
     printf("%d", num);
+
+    return 0;
 }
 
 void merge_sort(int* A, int p, int r) {
