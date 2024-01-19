@@ -2,12 +2,6 @@
 #include <algorithm>
 using namespace std;
 
-pair<char, char> tree[26];
-
-void preorder(char x);
-void inorder(char x);
-void postorder(char x);
-
 int main() {
     cin.tie(NULL);
     ios::sync_with_stdio(false);
