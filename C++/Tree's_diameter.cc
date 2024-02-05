@@ -1,45 +1,58 @@
 #include <iostream>
+#include <cstring>
 #include <vector>
 using namespace std;
 
-void dfs(int start, int len);
-int n, a, b, c, ans = 0, endpoint = 0, visited[10001] = { 0 };
-vector<pair<int, int>> node[10001];
+void dfs(int x, int dist);
+int V, node = 0, ans = 0, visited[100001] = { 0 };
+vector<pair<int, int>> line[100001];
 
 int main() {
     cin.tie(NULL);
     ios::sync_with_stdio(false);
 
-    cin >> n;
+    int dot, a, b;
 
-    for (int i = 1; i < n; i++) {
-        cin >> a >> b >> c;
-        node[a].push_back({ b, c });
-        node[b].push_back({ a, c });
+    cin >> V;
+
+    for (int i = 0; i < V; i++) {
+        cin >> dot;
+
+        while (true) {
+            cin >> a;
+
+            if (a == -1)
+                break;
+
+            cin >> b;
+            line[dot].push_back({ a, b });
+            line[a].push_back({ dot, b });
+        }
     }
 
     dfs(1, 0);
 
+    memset(visited, 0, sizeof(visited));
     ans = 0;
-    fill(visited, visited + n + 1, 0);
-    dfs(endpoint, 0);
+    dfs(node, 0);
 
     cout << ans;
 
     return 0;
 }
 
-void dfs(int start, int len) {
-    if (visited[start])
-        return;
-
-    visited[start] = 1;
-
-    if (ans < len) {
-        ans = len;
-        endpoint = start;
+void dfs(int x, int dist) {
+    if (ans < dist) {
+        node = x;
+        ans = dist;
     }
 
-    for (int i = 0; i < node[start].size(); i++)
-        dfs(node[start][i].first, len + node[start][i].second);
+    visited[x] = 1;
+
+    for (int i = 0; i < line[x].size(); i++) {
+        int next = line[x][i].first, ndist = dist + line[x][i].second;
+        
+        if (!visited[next])
+            dfs(next, ndist);
+    }
 }
