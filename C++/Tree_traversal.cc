@@ -1,56 +1,38 @@
 #include <iostream>
 using namespace std;
 
-pair<char, char> tree[26];
-
-void preorder(char x);
-void inorder(char x);
-void postorder(char x);
+void preorder(int inStart, int inEnd, int postStart, int postEnd);
+int n, inorder[100001], postorder[100001], idx[100001];;
 
 int main() {
     cin.tie(NULL);
+    cout.tie(NULL);
     ios::sync_with_stdio(false);
 
-    int N;
-    char p, left, right;
+    cin >> n;
 
-    cin >> N;
-
-    for (int i = 0; i < N; i++) {
-        cin >> p >> left >> right;
-        tree[p - 'A'].first = left;
-        tree[p - 'A'].second = right;
+    for (int i = 1; i <= n; i++) {
+        cin >> inorder[i];
+        idx[inorder[i]] = i;
     }
 
-    preorder('A');
-    cout << '\n';
-    inorder('A');
-    cout << '\n';
-    postorder('A');
+    for (int i = 1; i <= n; i++)
+        cin >> postorder[i];
+
+    preorder(1, n, 1, n);
 
     return 0;
 }
 
-void preorder(char x) {
-    if (x != '.') {
-        cout << x;
-        preorder(tree[x - 'A'].first);
-        preorder(tree[x - 'A'].second);
-    }
-}
+void preorder(int inStart, int inEnd, int postStart, int postEnd) {
+    if (inEnd < inStart || postEnd < postStart)
+        return;
 
-void inorder(char x) {
-    if (x != '.') {
-        inorder(tree[x - 'A'].first);
-        cout << x;
-        inorder(tree[x - 'A'].second);
-    }
-}
+    int root = idx[postorder[postEnd]];
+    int leftSize = root - inStart;
 
-void postorder(char x) {
-    if (x != '.') {
-        postorder(tree[x - 'A'].first);
-        postorder(tree[x - 'A'].second);
-        cout << x;
-    }
+    cout << inorder[root] << " ";
+
+    preorder(inStart, root - 1, postStart, postStart + leftSize - 1); // 왼쪽
+    preorder(root + 1, inEnd, postStart + leftSize, postEnd - 1); // 오른쪽
 }
